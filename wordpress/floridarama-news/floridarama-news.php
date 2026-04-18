@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
 }
 
 define('FR_NEWS_VERSION', '1.0.0');
-define('FR_NEWS_DEFAULT_DATA_URL', 'https://raw.githubusercontent.com/floridarama/floridarama-news-sync/main/news/data/news-items.json');
+define('FR_NEWS_DEFAULT_DATA_URL', 'https://raw.githubusercontent.com/Novakukla/floridarama-news-sync/main/news/data/news-items.json');
 
 function fr_news_register_assets() {
     $base_url = plugin_dir_url(__FILE__);

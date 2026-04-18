@@ -27,10 +27,10 @@ The script reads `news/data/news-items.json`, fetches missing metadata, fills Yo
 
 The GitHub Actions workflow at `.github/workflows/update-news-data.yml` runs weekly and can be started manually. It commits `news/data/news-items.json` only when the file changes.
 
-After pushing this repo to GitHub, update the plugin default URL if the owner/name differs from:
+The plugin default JSON URL points at:
 
 ```text
-https://raw.githubusercontent.com/floridarama/floridarama-news-sync/main/news/data/news-items.json
+https://raw.githubusercontent.com/Novakukla/floridarama-news-sync/main/news/data/news-items.json
 ```
 
 ## WordPress
@@ -47,10 +47,10 @@ Use the shortcode:
 [floridarama_news]
 ```
 
-Override the JSON URL when needed:
+Override the JSON URL only if needed:
 
 ```text
-[floridarama_news data_url="https://raw.githubusercontent.com/YOUR-OWNER/floridarama-news-sync/main/news/data/news-items.json"]
+[floridarama_news data_url="https://raw.githubusercontent.com/Novakukla/floridarama-news-sync/main/news/data/news-items.json"]
 ```
 
 See `wordpress/floridarama-news/README.md` for shortcode options.
