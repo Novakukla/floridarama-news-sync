@@ -13,7 +13,7 @@ This folder is a copy-paste WordPress plugin. Upload `wordpress/floridarama-news
 ```
 
 - `data_url`: JSON feed URL. By default this points at the expected raw GitHub URL for this repo.
-- `default_filter`: `spotlight`, `local`, `nation`, or `international`.
+- `default_filter`: `spotlight`, `local`, `national`, or `international`. The old `nation` value is still accepted as an alias.
 - `layout`: `wide` or `normal`. The default `wide` helps the grid fill a WordPress page that has a narrow content column.
 - `show_header`: `true` or `false`.
 - `show_tip`: `true` or `false`.

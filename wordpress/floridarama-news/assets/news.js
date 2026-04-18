@@ -3,8 +3,8 @@
 
   const FILTERS = [
     ["spotlight", "Spotlight"],
-    ["local", "Local News Features"],
-    ["nation", "National News Features"],
+    ["local", "Local"],
+    ["national", "National"],
     ["international", "International"]
   ];
   const STRIP_COLORS = ["#ff4fa3", "#29b6f6", "#35d07f", "#ffd84d", "#ff8a3d"];
@@ -147,8 +147,18 @@
 
   function filteredItems(data, filter) {
     const items = Array.isArray(data.items) ? data.items : [];
-    if (filter === "spotlight") return items.filter((item) => item.spotlight);
-    return items.filter((item) => item.group === filter);
+    const byId = new Map(items.map((item) => [item.id, item]));
+    const key = filter === "nation" ? "national" : filter;
+    const list = data.lists && (data.lists[key] || data.lists[filter]);
+
+    if (Array.isArray(list)) {
+      return list
+        .map((entry) => typeof entry === "string" ? byId.get(entry) : entry)
+        .filter(Boolean);
+    }
+
+    if (key === "spotlight") return items.filter((item) => item.spotlight);
+    return items.filter((item) => item.group === key || (key === "national" && item.group === "nation"));
   }
 
   function modalHtml() {
@@ -189,7 +199,8 @@
 
   function render(root, filter) {
     const data = root.__frNewsData || { items: [], localLinks: {} };
-    const active = FILTERS.some(([key]) => key === filter) ? filter : "spotlight";
+    const requested = filter === "nation" ? "national" : filter;
+    const active = FILTERS.some(([key]) => key === requested) ? requested : "spotlight";
     root.querySelectorAll(".fr-news__tab").forEach((button) => {
       const selected = button.dataset.frFilter === active;
       button.setAttribute("aria-selected", selected ? "true" : "false");

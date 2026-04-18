@@ -48,8 +48,9 @@ function fr_news_shortcode($atts) {
         'floridarama_news'
     );
 
-    $allowed_filters = array('spotlight', 'local', 'nation', 'international');
-    $default_filter = in_array($atts['default_filter'], $allowed_filters, true) ? $atts['default_filter'] : 'spotlight';
+    $default_filter = 'nation' === $atts['default_filter'] ? 'national' : $atts['default_filter'];
+    $allowed_filters = array('spotlight', 'local', 'national', 'international');
+    $default_filter = in_array($default_filter, $allowed_filters, true) ? $default_filter : 'spotlight';
     $layout = 'normal' === $atts['layout'] ? 'normal' : 'wide';
     $show_header = filter_var($atts['show_header'], FILTER_VALIDATE_BOOLEAN) ? 'true' : 'false';
     $show_tip = filter_var($atts['show_tip'], FILTER_VALIDATE_BOOLEAN) ? 'true' : 'false';

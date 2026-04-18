@@ -38,18 +38,26 @@ function stableId(item) {
 
 function normalizeText(value) {
   if (value == null) return value;
-  return String(value)
-    .replaceAll("â€™", "’")
-    .replaceAll("â€˜", "‘")
-    .replaceAll("â€œ", "“")
-    .replaceAll("â€�", "”")
-    .replaceAll("â€“", "–")
-    .replaceAll("â€”", "—")
-    .replaceAll("â€¦", "…")
-    .replaceAll("Â ", " ")
-    .replaceAll("Â", "")
-    .replace(/\s+/g, " ")
-    .trim();
+  let text = String(value);
+  const replacements = new Map([
+    ["\u00e2\u20ac\u2122", "\u2019"],
+    ["\u00e2\u20ac\u02dc", "\u2018"],
+    ["\u00e2\u20ac\u0153", "\u201c"],
+    ["\u00e2\u20ac\ufffd", "\u201d"],
+    ["\u00e2\u20ac\u201c", "\u2013"],
+    ["\u00e2\u20ac\u201d", "\u2014"],
+    ["\u00e2\u20ac\u00a6", "\u2026"],
+    ["\u00c3\u00a9", "\u00e9"],
+    ["\u00c3\u00a1", "\u00e1"],
+    ["\u00c3\u00ad", "\u00ed"],
+    ["\u00c3\u00b3", "\u00f3"],
+    ["\u00c3\u00ba", "\u00fa"],
+    ["\u00c3\u00b1", "\u00f1"],
+    ["\u00c2 ", " "],
+    ["\u00c2", ""]
+  ]);
+  for (const [bad, good] of replacements) text = text.replaceAll(bad, good);
+  return text.replace(/\s+/g, " ").trim();
 }
 
 function decodeHtmlEntities(value) {
@@ -146,6 +154,42 @@ function cleanTitle(title) {
   return cleaned && !isBlockedTitle(cleaned) ? cleaned : "";
 }
 
+function normalizeGroup(group) {
+  const value = String(group || "local").trim().toLowerCase();
+  if (value === "nation" || value === "national") return "national";
+  if (value === "international") return "international";
+  return "local";
+}
+
+function buildLists(items, existingLists = {}) {
+  const wanted = {
+    spotlight: [],
+    local: [],
+    national: [],
+    international: []
+  };
+
+  for (const item of items || []) {
+    if (!item || !item.id) continue;
+    const group = normalizeGroup(item.group);
+    item.group = group;
+    if (item.spotlight) wanted.spotlight.push(item.id);
+    if (wanted[group]) wanted[group].push(item.id);
+  }
+
+  const next = {};
+  for (const [key, ids] of Object.entries(wanted)) {
+    const allowed = new Set(ids);
+    const previous = Array.isArray(existingLists[key]) ? existingLists[key] : [];
+    next[key] = previous.filter((id) => allowed.has(id));
+    for (const id of ids) {
+      if (!next[key].includes(id)) next[key].push(id);
+    }
+  }
+
+  return next;
+}
+
 async function fetchWithTimeout(url, options = {}) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
@@ -196,7 +240,7 @@ function applyItemMetadata(item, metadata, summary) {
   item.title = normalizeText(item.title || "");
   item.source = normalizeText(item.source || hostname(item.url));
   item.tag = normalizeText(item.tag || (item.type === "video" ? "Video" : "Press"));
-  item.group = item.group || "local";
+  item.group = normalizeGroup(item.group);
   item.description = normalizeText(item.description || "");
 
   if (metadata.title && (!item.title || refreshTitles)) {
@@ -266,6 +310,7 @@ async function main() {
     }
   }
 
+  data.lists = buildLists(data.items || [], data.lists || {});
   data.updatedAt = previousUpdatedAt;
   const candidateJson = `${JSON.stringify(data, null, 2)}\n`;
   const hasChanges = candidateJson !== raw;

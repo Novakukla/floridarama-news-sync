@@ -1,5 +1,54 @@
 {
     "updatedAt":  "2026-04-18T17:57:54.0085427Z",
+    "lists":  {
+                  "spotlight":  [
+                                    "st-pete-catalyst-arts-alive-podcast-artist-lucy-sparrow-d1454e03",
+                                    "fused-magazine-felt-fantasies-in-florida-lucy-sparrow-la-0af07314",
+                                    "83-degrees-floridarama-showcases-lucy-sparrow-s-homage-t-4414b27d",
+                                    "tampa-bay-times-florida-fantasy-reigns-at-lucy-sparrow-s-73bd8369",
+                                    "tampa-bay-date-night-guide-lucy-sparrow-s-quick-shop-a-t-fbc51034",
+                                    "wtsp-10-tampa-bay-new-pop-up-shop-immersive-experience-f-9d723133",
+                                    "youtube-floridarama-on-wfla-gems-of-tampa-bay-with-brian-b3162f19",
+                                    "youtube-unveiled-abc-action-news-sean-daly-experiences-t-884e19da",
+                                    "youtube-floridarama-feature-video-fd2d14ee",
+                                    "youtube-floridarama-interview-coverage-741e5483",
+                                    "the-scottish-sun-florida-clearwater-and-st-petersburg-re-4b5737b5",
+                                    "youtube-make-sure-you-do-it-the-right-way-with-expert-li-3043d0e7",
+                                    "sewyoursoul-co-uk-lucy-sparrow-s-quick-shop-at-floridara-f2adaeb8"
+                                ],
+                  "local":  [
+                                "st-pete-catalyst-arts-alive-podcast-artist-lucy-sparrow-d1454e03",
+                                "tbn-weekly-happenings-a-and-e-news-and-events-diversions-1d0ee174",
+                                "83-degrees-floridarama-showcases-lucy-sparrow-s-homage-t-4414b27d",
+                                "tampa-bay-times-florida-fantasy-reigns-at-lucy-sparrow-s-73bd8369",
+                                "tampa-bay-date-night-guide-lucy-sparrow-s-quick-shop-a-t-fbc51034",
+                                "wtsp-10-tampa-bay-new-pop-up-shop-immersive-experience-f-9d723133",
+                                "youtube-floridarama-on-wfla-gems-of-tampa-bay-with-brian-b3162f19",
+                                "fox-13-new-exhibit-at-floridarama-fox-13-tampa-bay-ffa38201",
+                                "fox-13-sneak-peek-at-fairgrounds-st-pete-s-new-exhibit-f-c207d4d4",
+                                "youtube-unveiled-abc-action-news-sean-daly-experiences-t-884e19da",
+                                "youtube-floridarama-feature-video-fd2d14ee",
+                                "youtube-floridarama-interview-coverage-741e5483"
+                            ],
+                  "national":  [
+                                   "thrillist-things-to-do-in-st-petersburg-florida-on-your-1aee2e67",
+                                   "aarp-5-new-museums-in-florida-ed947528",
+                                   "afar-millennials-can-t-get-enough-of-tampa-and-st-pete-a-77a0caa6",
+                                   "art-business-news-fairgrounds-st-pete-expands-with-exhib-ce015269",
+                                   "blooloop-fairgrounds-st-pete-expands-and-rebrands-as-flo-96736573",
+                                   "blooloop-fairgrounds-st-pete-behind-the-immersive-art-ex-f3f7522c",
+                                   "youtube-make-sure-you-do-it-the-right-way-with-expert-li-3043d0e7",
+                                   "dailyart-magazine-mikhail-mansion-from-military-into-int-1da9f545",
+                                   "forbes-culture-continues-fueling-ascension-of-st-petersb-8b1e8b72",
+                                   "healthy-framework-best-museums-for-first-dates-in-st-pet-443fe9fc",
+                                   "livability-10-roadside-attractions-in-florida-you-can-t-9396f736"
+                               ],
+                  "international":  [
+                                        "fused-magazine-felt-fantasies-in-florida-lucy-sparrow-la-0af07314",
+                                        "the-scottish-sun-florida-clearwater-and-st-petersburg-re-4b5737b5",
+                                        "sewyoursoul-co-uk-lucy-sparrow-s-quick-shop-at-floridara-f2adaeb8"
+                                    ]
+              },
     "items":  [
                   {
                       "id":  "st-pete-catalyst-arts-alive-podcast-artist-lucy-sparrow-d1454e03",
@@ -157,7 +206,7 @@
                   {
                       "id":  "thrillist-things-to-do-in-st-petersburg-florida-on-your-1aee2e67",
                       "type":  "article",
-                      "group":  "nation",
+                      "group":  "national",
                       "tag":  "Feature",
                       "title":  "Things to Do in St. Petersburg Florida on Your Next Road Trip - Thrillist",
                       "source":  "Thrillist",
@@ -180,7 +229,7 @@
                   {
                       "id":  "aarp-5-new-museums-in-florida-ed947528",
                       "type":  "article",
-                      "group":  "nation",
+                      "group":  "national",
                       "tag":  "Feature",
                       "title":  "5 New Museums in Florida",
                       "source":  "AARP",
@@ -191,7 +240,7 @@
                   {
                       "id":  "afar-millennials-can-t-get-enough-of-tampa-and-st-pete-a-77a0caa6",
                       "type":  "article",
-                      "group":  "nation",
+                      "group":  "national",
                       "tag":  "Feature",
                       "title":  "Millennials can’t get enough of Tampa and St. Pete - AFAR",
                       "source":  "AFAR",
@@ -202,7 +251,7 @@
                   {
                       "id":  "art-business-news-fairgrounds-st-pete-expands-with-exhib-ce015269",
                       "type":  "article",
-                      "group":  "nation",
+                      "group":  "national",
                       "tag":  "Feature",
                       "title":  "Fairgrounds St. Pete Expands with Exhibit, Gives \"The Bait Ball\" Permanent Home - Art Business News",
                       "source":  "Art Business News",
@@ -213,7 +262,7 @@
                   {
                       "id":  "blooloop-fairgrounds-st-pete-expands-and-rebrands-as-flo-96736573",
                       "type":  "article",
-                      "group":  "nation",
+                      "group":  "national",
                       "tag":  "Feature",
                       "title":  "Fairgrounds St. Pete expands and rebrands as FloridaRAMA | blooloop",
                       "source":  "blooloop",
@@ -224,7 +273,7 @@
                   {
                       "id":  "blooloop-fairgrounds-st-pete-behind-the-immersive-art-ex-f3f7522c",
                       "type":  "article",
-                      "group":  "nation",
+                      "group":  "national",
                       "tag":  "Feature",
                       "title":  "Fairgrounds St. Pete: behind the immersive art experience | blooloop",
                       "source":  "blooloop",
@@ -235,7 +284,7 @@
                   {
                       "id":  "youtube-make-sure-you-do-it-the-right-way-with-expert-li-3043d0e7",
                       "type":  "video",
-                      "group":  "nation",
+                      "group":  "national",
                       "tag":  "Video",
                       "title":  "MAKE SURE YOU DO IT THE RIGHT WAY | With Expert Liz Dimmitt | The Business Spotlight",
                       "source":  "YouTube",
@@ -247,7 +296,7 @@
                   {
                       "id":  "dailyart-magazine-mikhail-mansion-from-military-into-int-1da9f545",
                       "type":  "article",
-                      "group":  "nation",
+                      "group":  "national",
                       "tag":  "Feature",
                       "title":  "Mikhail Mansion–From Military Into Interactive Art | DailyArt Magazine",
                       "source":  "DailyArt Magazine",
@@ -258,7 +307,7 @@
                   {
                       "id":  "forbes-culture-continues-fueling-ascension-of-st-petersb-8b1e8b72",
                       "type":  "article",
-                      "group":  "nation",
+                      "group":  "national",
                       "tag":  "Feature",
                       "title":  "Culture Continues Fueling Ascension Of St. Petersburg, Florida",
                       "source":  "Forbes",
@@ -269,7 +318,7 @@
                   {
                       "id":  "healthy-framework-best-museums-for-first-dates-in-st-pet-443fe9fc",
                       "type":  "article",
-                      "group":  "nation",
+                      "group":  "national",
                       "tag":  "Feature",
                       "title":  "Best museums for first dates in St. Petersburg - Healthy Framework",
                       "source":  "Healthy Framework",
@@ -280,7 +329,7 @@
                   {
                       "id":  "livability-10-roadside-attractions-in-florida-you-can-t-9396f736",
                       "type":  "article",
-                      "group":  "nation",
+                      "group":  "national",
                       "tag":  "Feature",
                       "title":  "10 Roadside Attractions in Florida You Can\u0027t Miss - Livability.com",
                       "source":  "Livability",

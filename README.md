@@ -23,6 +23,8 @@ node news/scripts/update-news-data.mjs --write
 
 The script reads `news/data/news-items.json`, fetches missing metadata, fills YouTube thumbnails/titles through oEmbed, avoids obvious bot-check titles, and preserves curated descriptions and thumbnails by default.
 
+The JSON includes explicit tab lists in `lists.spotlight`, `lists.local`, `lists.national`, and `lists.international`; the WordPress frontend renders those lists directly.
+
 ## Automation
 
 The GitHub Actions workflow at `.github/workflows/update-news-data.yml` runs weekly and can be started manually. It commits `news/data/news-items.json` only when the file changes.

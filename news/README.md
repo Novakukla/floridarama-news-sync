@@ -3,8 +3,9 @@
 `news/data/news-items.json` is the portable data source for the WordPress news frontend. It contains:
 
 - `updatedAt`: the last time the feed was written.
+- `lists`: curated tab lists keyed by item `id`.
 - `items`: card-based feature stories and videos.
-- `localLinks`: grouped local source links for the Local News Features tab.
+- `localLinks`: grouped local source links for the Local tab.
 
 ## Update Locally
 
@@ -47,7 +48,22 @@ To add a featured card, add an object to `items` with:
 }
 ```
 
-Use `group` values of `local`, `nation`, or `international`. Add `spotlight: true` when the item should appear in the Spotlight tab.
+Use `group` values of `local`, `national`, or `international`. Add `spotlight: true` when the item should appear in the Spotlight tab.
+
+After adding or removing an item, update `lists` so each tab has its own explicit order:
+
+```json
+{
+  "lists": {
+    "spotlight": ["story-id"],
+    "local": ["story-id"],
+    "national": ["story-id"],
+    "international": ["story-id"]
+  }
+}
+```
+
+The updater preserves manual list order, removes IDs that no longer belong, and appends newly matching items when it runs.
 
 For YouTube videos, `thumb` can be blank. The updater and frontend derive `https://img.youtube.com/vi/.../hqdefault.jpg`.
 
