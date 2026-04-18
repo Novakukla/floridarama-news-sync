@@ -1,0 +1,73 @@
+name: Add FloridaRAMA news URL
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: News article or video URL
+        required: true
+        type: string
+      group:
+        description: Tab/list destination
+        required: true
+        default: auto
+        type: choice
+        options:
+          - auto
+          - local
+          - national
+          - international
+      type:
+        description: Content type
+        required: true
+        default: auto
+        type: choice
+        options:
+          - auto
+          - article
+          - video
+      spotlight:
+        description: Also add to Spotlight
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  add-news-url:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Add news URL
+        env:
+          INPUT_URL: ${{ inputs.url }}
+          INPUT_GROUP: ${{ inputs.group }}
+          INPUT_TYPE: ${{ inputs.type }}
+          INPUT_SPOTLIGHT: ${{ inputs.spotlight }}
+        run: |
+          args=(--url "$INPUT_URL" --group "$INPUT_GROUP" --type "$INPUT_TYPE" --write)
+          if [ "$INPUT_SPOTLIGHT" = "true" ]; then
+            args+=(--spotlight)
+          fi
+          node news/scripts/add-news-url.mjs "${args[@]}"
+
+      - name: Commit changes
+        run: |
+          if git diff --quiet -- news/data/news-items.json; then
+            echo "No news data changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add news/data/news-items.json
+          git commit -m "Add FloridaRAMA news URL"
+          git push

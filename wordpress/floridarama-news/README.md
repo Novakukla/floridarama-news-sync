@@ -26,6 +26,21 @@ add_filter('fr_news_default_data_url', function () {
 });
 ```
 
+## Adding News From WordPress
+
+After activation, go to **FloridaRAMA News** in the WordPress admin.
+
+Paste:
+
+- the news article or video URL
+- a tab choice, or `Auto-detect`
+- an optional Spotlight checkbox
+- a fine-grained GitHub token
+
+The token is used for that request only and is not saved by the plugin. The admin form triggers the `add-news-url.yml` GitHub Actions workflow, and the workflow updates `news/data/news-items.json`.
+
+Use a fine-grained GitHub token scoped only to `Novakukla/floridarama-news-sync` with permission to run Actions/workflows. If GitHub rejects the request with a permission error, add the narrowest workflow/Actions write permission GitHub allows for workflow dispatch.
+
 ## Notes
 
 - CSS is namespaced under `.fr-news`.

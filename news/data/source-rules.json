@@ -1,0 +1,58 @@
+{
+  "local": {
+    "domains": [
+      "83degreesmedia.com",
+      "abcactionnews.com",
+      "baynews9.com",
+      "bizjournals.com",
+      "cltampa.com",
+      "ilovetheburg.com",
+      "stpetecatalyst.com",
+      "tampabay.com",
+      "tampabay28.com",
+      "tampabaydatenightguide.com",
+      "tampabayparenting.com",
+      "tbnweekly.com",
+      "thatssotampa.com",
+      "wfla.com",
+      "wtsp.com"
+    ],
+    "keywords": [
+      "floridarama",
+      "fairgrounds st. pete",
+      "fairgrounds st pete",
+      "st. pete",
+      "st pete",
+      "st. petersburg",
+      "st petersburg",
+      "pinellas",
+      "tampa bay",
+      "tampa",
+      "clearwater"
+    ]
+  },
+  "national": {
+    "domains": [
+      "aarp.org",
+      "afar.com",
+      "artbusinessnews.com",
+      "blooloop.com",
+      "dailyartmagazine.com",
+      "forbes.com",
+      "healthyframework.com",
+      "livability.com",
+      "thrillist.com"
+    ]
+  },
+  "international": {
+    "domains": [
+      "fusedmagazine.co.uk",
+      "sewyoursoul.co.uk",
+      "thescottishsun.co.uk"
+    ],
+    "tlds": [
+      ".co.uk",
+      ".uk"
+    ]
+  }
+}

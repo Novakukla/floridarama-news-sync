@@ -25,6 +25,12 @@ The script reads `news/data/news-items.json`, fetches missing metadata, fills Yo
 
 The JSON includes explicit tab lists in `lists.spotlight`, `lists.local`, `lists.national`, and `lists.international`; the WordPress frontend renders those lists directly.
 
+## Adding A News Link
+
+The WordPress plugin includes a **FloridaRAMA News** admin screen. Paste a URL and a fine-grained GitHub token, and the screen triggers `.github/workflows/add-news-url.yml`.
+
+The workflow runs `news/scripts/add-news-url.mjs`, fetches metadata, auto-detects the tab using `news/data/source-rules.json`, updates the JSON, and commits the change.
+
 ## Automation
 
 The GitHub Actions workflow at `.github/workflows/update-news-data.yml` runs weekly and can be started manually. It commits `news/data/news-items.json` only when the file changes.

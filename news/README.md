@@ -21,6 +21,18 @@ Write changes:
 node news/scripts/update-news-data.mjs --write
 ```
 
+Add one URL locally:
+
+```sh
+node news/scripts/add-news-url.mjs --url "https://example.com/story" --group auto --type auto --write
+```
+
+Add to Spotlight too:
+
+```sh
+node news/scripts/add-news-url.mjs --url "https://example.com/story" --group auto --spotlight --write
+```
+
 Optional flags:
 
 - `--refresh-titles`: replace existing item titles with fetched titles.
@@ -65,8 +77,12 @@ After adding or removing an item, update `lists` so each tab has its own explici
 
 The updater preserves manual list order, removes IDs that no longer belong, and appends newly matching items when it runs.
 
+`news/data/source-rules.json` controls auto-detection for Local, National, and International sources. Add domains or keywords there when a source is being classified into the wrong tab.
+
 For YouTube videos, `thumb` can be blank. The updater and frontend derive `https://img.youtube.com/vi/.../hqdefault.jpg`.
 
 ## GitHub Action
 
 `.github/workflows/update-news-data.yml` runs weekly on Monday morning UTC and can also be started manually with `workflow_dispatch`. It runs the updater in write mode and commits only when `news/data/news-items.json` changes.
+
+`.github/workflows/add-news-url.yml` accepts one URL, fetches metadata, classifies the story, updates the lists, and commits the JSON.
