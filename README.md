@@ -31,6 +31,12 @@ The WordPress plugin includes a **FloridaRAMA News** admin screen. Paste a URL a
 
 The workflow runs `news/scripts/add-news-url.mjs`, fetches metadata, auto-detects the tab using `news/data/source-rules.json`, updates the JSON, and commits the change.
 
+## Spotlight Curation
+
+The plugin admin screen can also manage the public Spotlight tab without a GitHub token. It stores only the selected Spotlight item IDs and display order in WordPress. The article content, thumbnails, and Local/National/International tabs still come from the GitHub JSON feed.
+
+If no WordPress Spotlight override has been saved, the frontend uses `lists.spotlight` from `news/data/news-items.json`.
+
 ## Automation
 
 The GitHub Actions workflow at `.github/workflows/update-news-data.yml` runs weekly and can be started manually. It commits `news/data/news-items.json` only when the file changes.

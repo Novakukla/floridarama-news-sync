@@ -85,7 +85,7 @@
     const itemHost = escapeHtml(host(item.url));
     const style = `--fr-card-fill: ${cardColor(index)};${item.type === "article" ? ` --fr-strip: ${stripColor(item)};` : ""}`;
     const thumbHtml = thumb
-      ? `<img class="fr-news__thumb" src="${escapeHtml(thumb)}" alt="" loading="lazy">`
+      ? `<img class="fr-news__thumb" src="${escapeHtml(thumb)}" alt="" loading="lazy" referrerpolicy="no-referrer">`
       : `<span class="fr-news__thumb--empty" aria-hidden="true"></span>`;
     const playHtml = isVideo
       ? `<span class="fr-news__play" aria-hidden="true"><span class="fr-news__play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span></span>`
@@ -159,6 +159,29 @@
 
     if (key === "spotlight") return items.filter((item) => item.spotlight);
     return items.filter((item) => item.group === key || (key === "national" && item.group === "nation"));
+  }
+
+  function spotlightOverride(root) {
+    const value = root.getAttribute("data-spotlight-ids");
+    if (value === null) return null;
+    try {
+      const ids = JSON.parse(value);
+      return Array.isArray(ids) ? ids.filter(Boolean) : null;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function applySpotlightOverride(root, data) {
+    const ids = spotlightOverride(root);
+    if (ids === null) return data;
+    return {
+      ...data,
+      lists: {
+        ...(data.lists || {}),
+        spotlight: ids
+      }
+    };
   }
 
   function modalHtml() {
@@ -242,6 +265,12 @@
     root.addEventListener("error", (event) => {
       const image = event.target;
       if (!(image instanceof HTMLImageElement) || !image.classList.contains("fr-news__thumb")) return;
+      const proxyBase = root.dataset.imageProxyUrl || "";
+      if (proxyBase && image.dataset.frProxied !== "true") {
+        image.dataset.frProxied = "true";
+        image.src = `${proxyBase}${encodeURIComponent(image.currentSrc || image.src)}`;
+        return;
+      }
       const fallback = document.createElement("span");
       fallback.className = "fr-news__thumb--empty";
       fallback.setAttribute("aria-hidden", "true");
@@ -288,7 +317,7 @@
     try {
       const response = await fetch(url, { credentials: "omit" });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
+      const data = applySpotlightOverride(root, await response.json());
       buildShell(root, data);
       bind(root);
       render(root, root.dataset.defaultFilter || "spotlight");

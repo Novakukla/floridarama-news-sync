@@ -16,6 +16,26 @@ define('FR_NEWS_DEFAULT_DATA_URL', 'https://raw.githubusercontent.com/Novakukla/
 define('FR_NEWS_GITHUB_REPO', 'Novakukla/floridarama-news-sync');
 define('FR_NEWS_GITHUB_REF', 'main');
 define('FR_NEWS_ADD_WORKFLOW', 'add-news-url.yml');
+define('FR_NEWS_SPOTLIGHT_OPTION', 'fr_news_spotlight_ids');
+
+function fr_news_default_data_url() {
+    return apply_filters('fr_news_default_data_url', FR_NEWS_DEFAULT_DATA_URL);
+}
+
+function fr_news_sanitize_item_id($id) {
+    $id = is_scalar($id) ? sanitize_text_field((string) $id) : '';
+    return preg_replace('/[^A-Za-z0-9_-]/', '', $id);
+}
+
+function fr_news_get_spotlight_override() {
+    $ids = get_option(FR_NEWS_SPOTLIGHT_OPTION, null);
+    if (!is_array($ids)) {
+        return null;
+    }
+
+    $ids = array_map('fr_news_sanitize_item_id', $ids);
+    return array_values(array_unique(array_filter($ids)));
+}
 
 function fr_news_register_assets() {
     $base_url = plugin_dir_url(__FILE__);
@@ -41,7 +61,7 @@ add_action('wp_enqueue_scripts', 'fr_news_register_assets');
 function fr_news_shortcode($atts) {
     $atts = shortcode_atts(
         array(
-            'data_url' => apply_filters('fr_news_default_data_url', FR_NEWS_DEFAULT_DATA_URL),
+            'data_url' => fr_news_default_data_url(),
             'default_filter' => 'spotlight',
             'layout' => 'wide',
             'show_header' => 'true',
@@ -57,6 +77,7 @@ function fr_news_shortcode($atts) {
     $layout = 'normal' === $atts['layout'] ? 'normal' : 'wide';
     $show_header = filter_var($atts['show_header'], FILTER_VALIDATE_BOOLEAN) ? 'true' : 'false';
     $show_tip = filter_var($atts['show_tip'], FILTER_VALIDATE_BOOLEAN) ? 'true' : 'false';
+    $spotlight_override = fr_news_get_spotlight_override();
 
     wp_enqueue_style('floridarama-news');
     wp_enqueue_script('floridarama-news');
@@ -66,9 +87,13 @@ function fr_news_shortcode($atts) {
     <div
         class="fr-news fr-news--<?php echo esc_attr($layout); ?>"
         data-news-url="<?php echo esc_url($atts['data_url']); ?>"
+        data-image-proxy-url="<?php echo esc_url(admin_url('admin-ajax.php?action=fr_news_image_proxy&url=')); ?>"
         data-default-filter="<?php echo esc_attr($default_filter); ?>"
         data-show-header="<?php echo esc_attr($show_header); ?>"
         data-show-tip="<?php echo esc_attr($show_tip); ?>"
+        <?php if (is_array($spotlight_override)) : ?>
+        data-spotlight-ids="<?php echo esc_attr(wp_json_encode($spotlight_override)); ?>"
+        <?php endif; ?>
     >
         <?php if ('true' === $show_header) : ?>
         <div class="fr-news__header">
@@ -88,6 +113,49 @@ function fr_news_shortcode($atts) {
     return ob_get_clean();
 }
 add_shortcode('floridarama_news', 'fr_news_shortcode');
+
+function fr_news_image_proxy() {
+    $url = isset($_GET['url']) ? esc_url_raw(wp_unslash($_GET['url'])) : '';
+
+    if (!$url || !wp_http_validate_url($url)) {
+        status_header(400);
+        exit;
+    }
+
+    $response = wp_safe_remote_get(
+        $url,
+        array(
+            'timeout' => 12,
+            'redirection' => 3,
+            'limit_response_size' => 6 * 1024 * 1024,
+            'headers' => array(
+                'Accept' => 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+                'User-Agent' => 'Mozilla/5.0 (compatible; FloridaRAMA-News/1.0; +https://floridarama.art/)',
+            ),
+        )
+    );
+
+    if (is_wp_error($response)) {
+        status_header(502);
+        exit;
+    }
+
+    $code = wp_remote_retrieve_response_code($response);
+    $type = wp_remote_retrieve_header($response, 'content-type');
+    $body = wp_remote_retrieve_body($response);
+
+    if (200 !== $code || !$body || 0 !== strpos(strtolower($type), 'image/')) {
+        status_header(404);
+        exit;
+    }
+
+    header('Content-Type: ' . $type);
+    header('Cache-Control: public, max-age=86400');
+    echo $body;
+    exit;
+}
+add_action('wp_ajax_fr_news_image_proxy', 'fr_news_image_proxy');
+add_action('wp_ajax_nopriv_fr_news_image_proxy', 'fr_news_image_proxy');
 
 function fr_news_admin_menu() {
     add_menu_page(
@@ -162,6 +230,107 @@ function fr_news_dispatch_add_url($token, $url, $group, $type, $spotlight) {
     return new WP_Error('fr_news_github_error', $message, array('status' => $code));
 }
 
+function fr_news_fetch_news_data() {
+    $response = wp_remote_get(
+        fr_news_default_data_url(),
+        array(
+            'timeout' => 15,
+            'headers' => array(
+                'Accept' => 'application/json',
+                'Cache-Control' => 'no-cache',
+                'User-Agent' => 'FloridaRAMA-News-WordPress',
+            ),
+        )
+    );
+
+    if (is_wp_error($response)) {
+        return $response;
+    }
+
+    $code = wp_remote_retrieve_response_code($response);
+    if (200 !== $code) {
+        return new WP_Error('fr_news_feed_error', 'The news feed returned HTTP ' . intval($code) . '.');
+    }
+
+    $data = json_decode(wp_remote_retrieve_body($response), true);
+    if (!is_array($data) || !isset($data['items']) || !is_array($data['items'])) {
+        return new WP_Error('fr_news_feed_error', 'The news feed did not contain a valid items list.');
+    }
+
+    return $data;
+}
+
+function fr_news_spotlight_ids_from_data($data) {
+    if (isset($data['lists']['spotlight']) && is_array($data['lists']['spotlight'])) {
+        return array_values(
+            array_filter(
+                array_map(
+                    function ($entry) {
+                        return is_string($entry) ? fr_news_sanitize_item_id($entry) : '';
+                    },
+                    $data['lists']['spotlight']
+                )
+            )
+        );
+    }
+
+    $ids = array();
+    foreach ($data['items'] as $item) {
+        if (!empty($item['spotlight']) && !empty($item['id'])) {
+            $ids[] = fr_news_sanitize_item_id($item['id']);
+        }
+    }
+
+    return $ids;
+}
+
+function fr_news_save_spotlight_from_request() {
+    $posted_ids = isset($_POST['fr_news_spotlight_ids']) ? (array) wp_unslash($_POST['fr_news_spotlight_ids']) : array();
+    $posted_order = isset($_POST['fr_news_spotlight_order']) ? (array) wp_unslash($_POST['fr_news_spotlight_order']) : array();
+    $ranked = array();
+
+    foreach ($posted_ids as $index => $posted_id) {
+        $id = fr_news_sanitize_item_id($posted_id);
+        if (!$id) {
+            continue;
+        }
+
+        $raw_order = isset($posted_order[$id]) ? trim((string) $posted_order[$id]) : '';
+        $ranked[$id] = array(
+            'id' => $id,
+            'order' => '' === $raw_order ? 9999 + intval($index) : intval($raw_order),
+            'index' => intval($index),
+        );
+    }
+
+    usort(
+        $ranked,
+        function ($a, $b) {
+            if ($a['order'] === $b['order']) {
+                return $a['index'] <=> $b['index'];
+            }
+            return $a['order'] <=> $b['order'];
+        }
+    );
+
+    update_option(FR_NEWS_SPOTLIGHT_OPTION, wp_list_pluck($ranked, 'id'), false);
+}
+
+function fr_news_group_label($item) {
+    $group = isset($item['group']) ? $item['group'] : '';
+    if ('nation' === $group) {
+        $group = 'national';
+    }
+
+    $labels = array(
+        'local' => 'Local',
+        'national' => 'National',
+        'international' => 'International',
+    );
+
+    return isset($labels[$group]) ? $labels[$group] : 'Other';
+}
+
 function fr_news_render_admin_page() {
     if (!current_user_can('manage_options')) {
         return;
@@ -170,7 +339,19 @@ function fr_news_render_admin_page() {
     $notice = null;
     $notice_type = 'info';
 
-    if ('POST' === $_SERVER['REQUEST_METHOD'] && isset($_POST['fr_news_add_url_nonce'])) {
+    if ('POST' === $_SERVER['REQUEST_METHOD'] && isset($_POST['fr_news_save_spotlight_nonce'])) {
+        check_admin_referer('fr_news_save_spotlight', 'fr_news_save_spotlight_nonce');
+
+        fr_news_save_spotlight_from_request();
+        $notice = 'Saved the WordPress Spotlight selection. No GitHub token was needed.';
+        $notice_type = 'success';
+    } elseif ('POST' === $_SERVER['REQUEST_METHOD'] && isset($_POST['fr_news_reset_spotlight_nonce'])) {
+        check_admin_referer('fr_news_reset_spotlight', 'fr_news_reset_spotlight_nonce');
+
+        delete_option(FR_NEWS_SPOTLIGHT_OPTION);
+        $notice = 'Reset Spotlight to the GitHub JSON fallback.';
+        $notice_type = 'success';
+    } elseif ('POST' === $_SERVER['REQUEST_METHOD'] && isset($_POST['fr_news_add_url_nonce'])) {
         check_admin_referer('fr_news_add_url', 'fr_news_add_url_nonce');
 
         $token = isset($_POST['fr_news_token']) ? trim(sanitize_text_field(wp_unslash($_POST['fr_news_token']))) : '';
@@ -202,6 +383,30 @@ function fr_news_render_admin_page() {
             }
         }
     }
+
+    $news_data = fr_news_fetch_news_data();
+    $news_items = is_wp_error($news_data) ? array() : $news_data['items'];
+    $spotlight_override = fr_news_get_spotlight_override();
+    $github_spotlight_ids = is_wp_error($news_data) ? array() : fr_news_spotlight_ids_from_data($news_data);
+    $active_spotlight_ids = is_array($spotlight_override) ? $spotlight_override : $github_spotlight_ids;
+    $spotlight_order = array_flip($active_spotlight_ids);
+    $table_items = $news_items;
+
+    usort(
+        $table_items,
+        function ($a, $b) use ($spotlight_order) {
+            $a_id = isset($a['id']) ? fr_news_sanitize_item_id($a['id']) : '';
+            $b_id = isset($b['id']) ? fr_news_sanitize_item_id($b['id']) : '';
+            $a_order = isset($spotlight_order[$a_id]) ? $spotlight_order[$a_id] : 100000;
+            $b_order = isset($spotlight_order[$b_id]) ? $spotlight_order[$b_id] : 100000;
+
+            if ($a_order !== $b_order) {
+                return $a_order <=> $b_order;
+            }
+
+            return strcasecmp(isset($a['title']) ? $a['title'] : '', isset($b['title']) ? $b['title'] : '');
+        }
+    );
 
     ?>
     <div class="wrap fr-news-admin">
@@ -268,6 +473,89 @@ function fr_news_render_admin_page() {
                 </table>
                 <?php submit_button('Submit to GitHub Actions'); ?>
             </form>
+        </div>
+
+        <div class="card" style="max-width: 980px;">
+            <h2>Manage Spotlight</h2>
+            <p>
+                Choose which GitHub news items appear in the Spotlight tab and set their display order. This is saved in WordPress,
+                so it does not require a GitHub token.
+            </p>
+            <p>
+                <strong>Current mode:</strong>
+                <?php if (is_array($spotlight_override)) : ?>
+                    WordPress override with <?php echo esc_html(count($spotlight_override)); ?> selected item<?php echo 1 === count($spotlight_override) ? '' : 's'; ?>.
+                <?php else : ?>
+                    GitHub JSON fallback with <?php echo esc_html(count($github_spotlight_ids)); ?> selected item<?php echo 1 === count($github_spotlight_ids) ? '' : 's'; ?>.
+                <?php endif; ?>
+            </p>
+
+            <?php if (is_wp_error($news_data)) : ?>
+                <?php fr_news_admin_notice('Could not load the news feed for Spotlight editing. ' . esc_html($news_data->get_error_message()), 'warning'); ?>
+            <?php else : ?>
+                <form method="post" action="">
+                    <?php wp_nonce_field('fr_news_save_spotlight', 'fr_news_save_spotlight_nonce'); ?>
+                    <table class="widefat striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Spotlight</th>
+                                <th scope="col">Order</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Source</th>
+                                <th scope="col">Tab</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($table_items as $item) : ?>
+                                <?php
+                                $id = isset($item['id']) ? fr_news_sanitize_item_id($item['id']) : '';
+                                if (!$id) {
+                                    continue;
+                                }
+                                $selected = isset($spotlight_order[$id]);
+                                $order_value = $selected ? $spotlight_order[$id] + 1 : '';
+                                $title = isset($item['title']) ? $item['title'] : $id;
+                                $source = isset($item['source']) ? $item['source'] : '';
+                                ?>
+                                <tr>
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" name="fr_news_spotlight_ids[]" value="<?php echo esc_attr($id); ?>" <?php checked($selected); ?>>
+                                            Show
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            step="1"
+                                            name="fr_news_spotlight_order[<?php echo esc_attr($id); ?>]"
+                                            value="<?php echo esc_attr($order_value); ?>"
+                                            style="width: 72px;"
+                                        >
+                                    </td>
+                                    <td>
+                                        <strong><?php echo esc_html($title); ?></strong>
+                                        <?php if (!empty($item['url'])) : ?>
+                                            <br><a href="<?php echo esc_url($item['url']); ?>" target="_blank" rel="noopener noreferrer">Open article</a>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td><?php echo esc_html($source); ?></td>
+                                    <td><?php echo esc_html(fr_news_group_label($item)); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <?php submit_button('Save Spotlight Selection'); ?>
+                </form>
+
+                <?php if (is_array($spotlight_override)) : ?>
+                    <form method="post" action="" style="margin-top: -12px;">
+                        <?php wp_nonce_field('fr_news_reset_spotlight', 'fr_news_reset_spotlight_nonce'); ?>
+                        <?php submit_button('Reset to GitHub Spotlight', 'secondary', 'submit', false); ?>
+                    </form>
+                <?php endif; ?>
+            <?php endif; ?>
         </div>
 
         <div class="card" style="max-width: 760px;">

@@ -41,6 +41,14 @@ The token is used for that request only and is not saved by the plugin. The admi
 
 Use a fine-grained GitHub token scoped only to `Novakukla/floridarama-news-sync` with permission to run Actions/workflows. If GitHub rejects the request with a permission error, add the narrowest workflow/Actions write permission GitHub allows for workflow dispatch.
 
+## Managing Spotlight Without a Token
+
+The **Manage Spotlight** section on the same admin screen lets WordPress control only the Spotlight tab. It loads the available articles from the GitHub JSON feed, then stores the selected Spotlight item IDs and order in the WordPress database.
+
+This does not rewrite GitHub JSON, so it does not require a GitHub token. Local, National, and International still come from the GitHub feed. If no WordPress Spotlight override has been saved, the shortcode falls back to `lists.spotlight` in `news/data/news-items.json`.
+
+Use **Reset to GitHub Spotlight** to delete the WordPress override and return to the repo-managed Spotlight list.
+
 ## Notes
 
 - CSS is namespaced under `.fr-news`.
