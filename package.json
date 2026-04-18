@@ -1,0 +1,13 @@
+{
+  "name": "floridarama-news-sync",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "update": "node news/scripts/update-news-data.mjs",
+    "update:write": "node news/scripts/update-news-data.mjs --write"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

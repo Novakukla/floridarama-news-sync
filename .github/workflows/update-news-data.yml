@@ -1,0 +1,36 @@
+name: Update FloridaRAMA news data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 9 * * 1"
+
+permissions:
+  contents: write
+
+jobs:
+  update-news-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Update news data
+        run: node news/scripts/update-news-data.mjs --write
+
+      - name: Commit changes
+        run: |
+          if git diff --quiet -- news/data/news-items.json; then
+            echo "No news data changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add news/data/news-items.json
+          git commit -m "Update FloridaRAMA news data"
+          git push
