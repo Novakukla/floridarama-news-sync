@@ -166,14 +166,17 @@
   }
 
   function buildShell(root, data) {
+    const showHeader = root.dataset.showHeader !== "false";
     const showTip = root.dataset.showTip !== "false";
     root.innerHTML = `
-      <div class="fr-news__header">
-        <div>
-          <h2 class="fr-news__title">News &amp; Media</h2>
-          <p class="fr-news__subtitle">Press, features, and video coverage of FloridaRAMA.</p>
+      ${showHeader ? `
+        <div class="fr-news__header">
+          <div>
+            <h2 class="fr-news__title">News &amp; Media</h2>
+            <p class="fr-news__subtitle">Press, features, and video coverage of FloridaRAMA.</p>
+          </div>
         </div>
-      </div>
+      ` : ""}
       <div class="fr-news__tabs" role="tablist" aria-label="News filters">
         ${FILTERS.map(([key, label]) => `<button class="fr-news__tab" type="button" role="tab" data-fr-filter="${key}" aria-selected="false">${label}</button>`).join("")}
       </div>
@@ -225,6 +228,15 @@
   }
 
   function bind(root) {
+    root.addEventListener("error", (event) => {
+      const image = event.target;
+      if (!(image instanceof HTMLImageElement) || !image.classList.contains("fr-news__thumb")) return;
+      const fallback = document.createElement("span");
+      fallback.className = "fr-news__thumb--empty";
+      fallback.setAttribute("aria-hidden", "true");
+      image.replaceWith(fallback);
+    }, true);
+
     root.addEventListener("click", (event) => {
       const tab = event.target.closest(".fr-news__tab");
       if (tab && root.contains(tab)) {

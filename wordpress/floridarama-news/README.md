@@ -9,11 +9,13 @@ This folder is a copy-paste WordPress plugin. Upload `wordpress/floridarama-news
 ## Shortcode Attributes
 
 ```text
-[floridarama_news data_url="https://example.com/news-items.json" default_filter="local" show_tip="false"]
+[floridarama_news data_url="https://example.com/news-items.json" default_filter="local" layout="normal" show_header="false" show_tip="false"]
 ```
 
 - `data_url`: JSON feed URL. By default this points at the expected raw GitHub URL for this repo.
 - `default_filter`: `spotlight`, `local`, `nation`, or `international`.
+- `layout`: `wide` or `normal`. The default `wide` helps the grid fill a WordPress page that has a narrow content column.
+- `show_header`: `true` or `false`.
 - `show_tip`: `true` or `false`.
 
 You can also override the default feed URL in theme/plugin PHP:

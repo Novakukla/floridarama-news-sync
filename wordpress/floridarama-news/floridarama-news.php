@@ -40,6 +40,8 @@ function fr_news_shortcode($atts) {
         array(
             'data_url' => apply_filters('fr_news_default_data_url', FR_NEWS_DEFAULT_DATA_URL),
             'default_filter' => 'spotlight',
+            'layout' => 'wide',
+            'show_header' => 'true',
             'show_tip' => 'true',
         ),
         $atts,
@@ -48,6 +50,8 @@ function fr_news_shortcode($atts) {
 
     $allowed_filters = array('spotlight', 'local', 'nation', 'international');
     $default_filter = in_array($atts['default_filter'], $allowed_filters, true) ? $atts['default_filter'] : 'spotlight';
+    $layout = 'normal' === $atts['layout'] ? 'normal' : 'wide';
+    $show_header = filter_var($atts['show_header'], FILTER_VALIDATE_BOOLEAN) ? 'true' : 'false';
     $show_tip = filter_var($atts['show_tip'], FILTER_VALIDATE_BOOLEAN) ? 'true' : 'false';
 
     wp_enqueue_style('floridarama-news');
@@ -56,17 +60,20 @@ function fr_news_shortcode($atts) {
     ob_start();
     ?>
     <div
-        class="fr-news"
+        class="fr-news fr-news--<?php echo esc_attr($layout); ?>"
         data-news-url="<?php echo esc_url($atts['data_url']); ?>"
         data-default-filter="<?php echo esc_attr($default_filter); ?>"
+        data-show-header="<?php echo esc_attr($show_header); ?>"
         data-show-tip="<?php echo esc_attr($show_tip); ?>"
     >
+        <?php if ('true' === $show_header) : ?>
         <div class="fr-news__header">
             <div>
                 <h2 class="fr-news__title">News &amp; Media</h2>
                 <p class="fr-news__subtitle">Press, features, and video coverage of FloridaRAMA.</p>
             </div>
         </div>
+        <?php endif; ?>
         <p class="fr-news__fallback">
             FloridaRAMA news is loading. Visit
             <a href="<?php echo esc_url($atts['data_url']); ?>" target="_blank" rel="noopener noreferrer">the news feed</a>

@@ -47,6 +47,12 @@ Use the shortcode:
 [floridarama_news]
 ```
 
+If the WordPress page already has a large page title/intro above the shortcode, use:
+
+```text
+[floridarama_news show_header="false"]
+```
+
 Override the JSON URL only if needed:
 
 ```text
