@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-18T19:53:27.301Z",
+  "updatedAt": "2026-04-20T10:01:13.021Z",
   "lists": {
     "spotlight": [
       "st-pete-catalyst-arts-alive-podcast-artist-lucy-sparrow-d1454e03",
@@ -153,7 +153,7 @@
       "title": "FloridaRAMA on WFLA Gems of Tampa Bay with Brianda Villegas",
       "source": "YouTube",
       "url": "https://www.youtube.com/watch?v=5gQ6UwI31us&list=PLI56I3I7Rz9So_IJCoR9ngsBJG98ZsASk&index=28",
-      "thumb": "",
+      "thumb": "https://i.ytimg.com/vi/5gQ6UwI31us/hqdefault.jpg",
       "description": "Video coverage featuring FloridaRAMA.",
       "spotlight": true
     },
@@ -187,7 +187,7 @@
       "title": "Unveiled: ABC Action News Sean Daly Experiences \"The Bait Ball\" Artwork at FloridaRAMA",
       "source": "YouTube",
       "url": "https://www.youtube.com/watch?v=nwKtNku_tiM&list=PLI56I3I7Rz9So_IJCoR9ngsBJG98ZsASk&index=34",
-      "thumb": "",
+      "thumb": "https://i.ytimg.com/vi/nwKtNku_tiM/hqdefault.jpg",
       "description": "Video coverage featuring FloridaRAMA.",
       "spotlight": true
     },
@@ -199,7 +199,7 @@
       "title": "FloridaRAMA Feature Video",
       "source": "YouTube",
       "url": "https://www.youtube.com/watch?v=OXi6q2SlPHs",
-      "thumb": "",
+      "thumb": "https://i.ytimg.com/vi/OXi6q2SlPHs/hqdefault.jpg",
       "description": "Video coverage related to FloridaRAMA.",
       "spotlight": true
     },
@@ -211,7 +211,7 @@
       "title": "FloridaRAMA Interview / Coverage",
       "source": "YouTube",
       "url": "https://www.youtube.com/watch?v=0j0Zg4QHUEI",
-      "thumb": "",
+      "thumb": "https://i.ytimg.com/vi/0j0Zg4QHUEI/hqdefault.jpg",
       "description": "Video coverage related to FloridaRAMA.",
       "spotlight": true
     },
@@ -234,7 +234,7 @@
       "title": "Florida: Clearwater & St. Petersburg review - The Scottish Sun",
       "source": "The Scottish Sun",
       "url": "https://www.thescottishsun.co.uk/travel/8303490/florida-clearwater-st-petersburg-review/",
-      "thumb": "",
+      "thumb": "https://www.thescottishsun.co.uk/wp-content/uploads/sites/2/2022/01/NINTCHDBPICT000472120748.jpg?quality=90&strip=all&w=1920&h=1080&crop=1",
       "description": "Travel coverage featuring the area.",
       "spotlight": true
     },
@@ -257,7 +257,7 @@
       "title": "Millennials can’t get enough of Tampa and St. Pete - AFAR",
       "source": "AFAR",
       "url": "https://www.afar.com/magazine/millennials-cant-get-enough-of-tampa-and-st-pete-florida",
-      "thumb": "",
+      "thumb": "https://afar.brightspotcdn.com/dims4/default/04ffcb0/2147483647/strip/true/crop/3000x1500+0+250/resize/1440x720!/quality/90/?url=https%3A%2F%2Fk3-prod-afar-media.s3.us-west-2.amazonaws.com%2Fbrightspot%2Fa1%2Fff%2Fdc4025e40ab4c2e341e49e2be8a1%2Foriginal-shutterstock-385524508.jpg",
       "description": "National travel feature about Tampa and St. Pete."
     },
     {
@@ -301,7 +301,7 @@
       "title": "MAKE SURE YOU DO IT THE RIGHT WAY | With Expert Liz Dimmitt | The Business Spotlight",
       "source": "YouTube",
       "url": "https://www.youtube.com/watch?v=7JO-tY212pM",
-      "thumb": "",
+      "thumb": "https://i.ytimg.com/vi/7JO-tY212pM/hqdefault.jpg",
       "description": "National feature video.",
       "spotlight": true
     },
@@ -335,7 +335,7 @@
       "title": "Best museums for first dates in St. Petersburg - Healthy Framework",
       "source": "Healthy Framework",
       "url": "https://healthyframework.com/best-museums-first-dates-st-petersburg/",
-      "thumb": "",
+      "thumb": "https://healthyframework.com/wp-content/uploads/2025/12/Mobile-Logo-Largest.png",
       "description": "Roundup-style feature mentioning local museums."
     },
     {
@@ -794,39 +794,39 @@
     "Tampa Bay Parenting": [
       {
         "url": "https://tampabayparenting.com/fairgrounds-st-pete/",
-        "title": ""
+        "title": "A Whimsical Wonderland: FloridaRAMA is a MUST-SEE for Families"
       },
       {
         "url": "https://tampabayparenting.com/valentines-day-as-a-family-tampa-bay-3666/",
-        "title": ""
+        "title": "Fun Ways to Celebrate Valentine's Day as A Family in Tampa Bay"
       }
     ],
     "Wild 94.1": [
       {
         "url": "https://wild941.com/2025/03/10/floridarama-kicks-off-spring-break-mermaid-pirate-march-with-exciting-new-activities/",
-        "title": ""
+        "title": "FloridaRAMA Kicks Off Spring Break \"Mermaid & Pirate March\" With Exciting New Activities"
       }
     ],
     "98.7 The Shark": [
       {
         "url": "https://bbgi.com/brands/",
-        "title": ""
+        "title": "Brands - Beasley Media Group, LLC"
       }
     ],
     "TBAY Today": [
       {
         "url": "https://tbaytoday.6amcity.com/city/st-pete-happiest-places-to-live",
-        "title": ""
+        "title": "6 ways to enjoy a day in sunny St. Pete"
       }
     ],
     "That So Tampa": [
       {
         "url": "https://thatssotampa.com/iboms-tpa-art-installation/",
-        "title": ""
+        "title": "Acclaimed local artist iBOMS will unveil new art installation featuring rubber ducks at TPA"
       },
       {
         "url": "https://thatssotampa.com/fairgrounds-st-pete/",
-        "title": ""
+        "title": "[PHOTOS] Inside Fairgrounds, an immersive arts playground in Florida"
       }
     ],
     "WFLA News Channel 8": [
@@ -846,7 +846,7 @@
     "Spot On Florida": [
       {
         "url": "https://spotonflorida.com/west-central-florida/5219059/local-artist-iboms-gets-two-spectacular.html",
-        "title": ""
+        "title": "Local artist iBOMS gets two spectacular exhibits at TPA and Fairgrounds St. Pete | West Central Florida"
       }
     ],
     "Voyage Tampa": [
@@ -870,45 +870,45 @@
     "Watermark": [
       {
         "url": "https://watermarkonline.com/2024/03/14/the-mertailor-and-more-swim-into-fairgrounds-st-pete/",
-        "title": ""
+        "title": "The Mertailor and more swim into Fairgrounds St. Pete - Watermark Out News"
       }
     ],
     "the gabber": [
       {
         "url": "https://thegabber.com/things-to-do-april-3-10-in-gulfport-st-pete/",
-        "title": ""
+        "title": "Things To Do April 3-10 in Gulfport, St. Pete"
       },
       {
         "url": "https://thegabber.com/things-to-do-march-27-april-3-in-gulfport-st-pete/",
-        "title": ""
+        "title": "Things to Do March 27-April 3 in Gulfport, St. Pete"
       },
       {
         "url": "https://thegabber.com/things-to-do-march-20-27-in-gulfport-st-pete/",
-        "title": ""
+        "title": "Things To Do March 20-27 in Gulfport, St. Pete"
       },
       {
         "url": "https://thegabber.com/things-to-do-march-6-13-in-gulfport-st-pete/",
-        "title": ""
+        "title": "Things To Do March 6-13 in Gulfport, St. Pete"
       },
       {
         "url": "https://thegabber.com/things-to-do-february-6-13-in-gulfport-st-pete/",
-        "title": ""
+        "title": "Things To Do February 6-13 in Gulfport, St. Pete"
       },
       {
         "url": "https://thegabber.com/things-to-do-jan-9-16-in-gulfport-st-pete/",
-        "title": ""
+        "title": "Things To Do January 9-15 in Gulfport, St. Pete"
       },
       {
         "url": "https://thegabber.com/meet-tampa-bays-trio-band-la-lucha/",
-        "title": ""
+        "title": "Meet Tampa Bay's Trio Band La Lucha"
       },
       {
         "url": "https://thegabber.com/creative-pinellas-arts-annual-hurricane-relief-fundraiser-to-benefit-artists/",
-        "title": ""
+        "title": "Creative Pinellas' Arts Annual Hurricane Relief Fundraiser to Benefit Artists"
       },
       {
         "url": "https://thegabber.com/a-to-z-holiday-gift-guide-in-pinellas/",
-        "title": ""
+        "title": "A-to-Z Holiday Gift Guide in Pinellas"
       }
     ],
     "The Weekly Challenger": [
